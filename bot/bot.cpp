@@ -745,7 +745,7 @@ void BotThink( bot_t *pBot )
    // if the bot is dead, randomly press fire to respawn...
    if ((pEdict->v.health < 1) || (pEdict->v.deadflag != DEAD_NO))
    {
-	   debugFile( "X" );
+	   debugFile( (char *) "X" );
 	  if (pBot->need_to_initialize)
          BotSpawnInit(pBot);
 

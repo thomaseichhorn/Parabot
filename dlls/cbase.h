@@ -276,6 +276,7 @@ public:
 		return NULL;
 	}
 
+	/*
 	// Ugly code to lookup all functions to make sure they are exported when set.
 #ifdef _DEBUG
 	void FunctionCheck( void *pFunction, char *name ) 
@@ -309,6 +310,7 @@ public:
 		return func;
 	}
 #endif
+*/
 	// virtual functions used by a few classes
 	
 	// used by monsters that are created by the MonsterMaker

@@ -270,7 +270,7 @@ BOOL ClientConnect( edict_t *pEntity, const char *pszName, const char *pszAddres
 	else
 		connected = MDLL_ClientConnect(pEntity, pszName, pszAddress, szRejectReason);
 
-	debugFile( "  OK\n" );
+	debugFile( (char *) "  OK\n" );
 	if(!g_meta_init)
 		return connected;
 	else
@@ -321,7 +321,7 @@ void ClientDisconnect( edict_t *pEntity )
 		MDLL_ClientDisconnect(pEntity);
 
 	//if (index != -1) FREE_PRIVATE( pEntity );	// fakeclient fix by Leon Hartwig
-	debugFile( "  OK\n" );
+	debugFile( (char *) "  OK\n" );
 	if(g_meta_init)
 		RETURN_META(MRES_SUPERCEDE);
 }

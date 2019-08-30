@@ -351,7 +351,7 @@ void ClientCommand( edict_t *pEntity )
 				else
 					RETURN_META(MRES_IGNORED);
 			}
-			debugFile( "Changing map...\n" );
+			debugFile( (char *) "Changing map...\n" );
 			FakeClientCommand( pEntity, "hideconsole", 0, 0 );
 			CHANGE_LEVEL( newmap, NULL );
 			if(!g_meta_init)

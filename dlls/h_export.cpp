@@ -168,22 +168,22 @@ extern "C" void WINAPI DLLEXPORT GiveFnptrsToDll( enginefuncs_t* pengfuncsFromEn
 		switch( mod_id )
 		{
 			case AG_DLL:
-				strcat( filePath, "/dlls/ag"ARCH_SUFFIX"."OS_LIB_EXT );
+				strcat( filePath, "/dlls/ag" ARCH_SUFFIX "." OS_LIB_EXT );
 				break;
 			case VALVE_DLL:
-				strcat( filePath, "/dlls/hl."OS_LIB_EXT );
+				strcat( filePath, "/dlls/hl." OS_LIB_EXT );
 				break;
 			case DMC_DLL:
-				strcat( filePath, "/dlls/dmc."OS_LIB_EXT );
+				strcat( filePath, "/dlls/dmc." OS_LIB_EXT );
 				break;
 			case GEARBOX_DLL:
-				strcat( filePath, "/dlls/opfor."OS_LIB_EXT );
+				strcat( filePath, "/dlls/opfor." OS_LIB_EXT );
 				break;
 			case HOLYWARS_DLL:
-				strcat( filePath, "/dlls/holywars"ARCH_SUFFIX"."OS_LIB_EXT );
+				strcat( filePath, "/dlls/holywars" ARCH_SUFFIX "." OS_LIB_EXT );
 				break;
 			case HUNGER_DLL:
-                                strcat( filePath, "/dlls/einar"ARCH_SUFFIX"."OS_LIB_EXT );
+                                strcat( filePath, "/dlls/einar" ARCH_SUFFIX "." OS_LIB_EXT );
                                 break;
 			default:
 				break;
@@ -193,7 +193,7 @@ extern "C" void WINAPI DLLEXPORT GiveFnptrsToDll( enginefuncs_t* pengfuncsFromEn
 
 		if (h_Library == NULL) {	// Directory error or Unsupported MOD!
 			errorMsg( "MOD Dll not found (or unsupported MOD)!" );
-			debugFile( "Library = 0\n" );
+			debugFile( (char *) "Library = 0\n" );
 		}
 
 		other_GetEntityAPI = (GETENTITYAPI)GetProcAddress( h_Library, "GetEntityAPI" );
