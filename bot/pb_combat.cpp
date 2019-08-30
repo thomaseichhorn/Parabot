@@ -200,8 +200,8 @@ void PB_Combat::closeCombatMovement( PB_Percept &perceipt )
 {
 	edict_t *enemy = perceipt.entity;
 	assert( enemy != 0 );
-	if (enemy==0) debugFile( " ENEMY=0 " );
-	if (botEnt==0) debugFile( " BOTENT=0 " );
+	if (enemy==0) debugFile( (char *) " ENEMY=0 " );
+	if (botEnt==0) debugFile( (char *) " BOTENT=0 " );
 	
 	// init distance to enemy
 	float enemyDist = perceipt.distance;
