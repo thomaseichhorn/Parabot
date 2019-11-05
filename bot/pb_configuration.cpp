@@ -481,11 +481,13 @@ bool PB_Configuration::createPersonalities( const char *PersonalitityFile )
 char* PB_Configuration::getColor( int persNr, int modulo )
 {
 	static char color[4];
+	static char temp[5];
 	int code = 0;
 	int nameLen = strlen( character[persNr].name );
 	for (int i=0; i<nameLen; i++) 
 		code += ((int)character[persNr].name[i] * (729+i)) % modulo;
 	code = (code % 255) + 1;
-	sprintf( color, "%i", code );
+	sprintf( temp, "%i", code );
+	strncpy ( color, temp, 4 );
 	return color;
 }
