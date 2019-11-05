@@ -108,17 +108,17 @@ bool PB_Chat::load( const char *chatFile )
 	currentCodeBlock = 0;
 		
 	while (!feof(file)) {
-		fscanf( file, "%1s", str );			// read first char
+		size_t temp = fscanf( file, "%1s", str );			// read first char
 		if (feof(file)) break;
 
 		while (str[0]=='#') {				// Comments:
-			fscanf( file, "%[^\n]", str );	//   read entire line
-			fscanf( file, "%1s", str );		//   read first char
+			temp += fscanf( file, "%[^\n]", str );	//   read entire line
+			temp += fscanf( file, "%1s", str );		//   read first char
 		}
 		if ( !feof(file) ) {
 			
 			if (str[0]=='@') {						// new codeblock
-				fscanf( file, "%[a-zA-Z_]", str);
+				temp += fscanf( file, "%[a-zA-Z_]", str);
 					 if ( _stricmp( str, "USE_SPEECH_SYNTHESIS" ) == 0 ) speechSynthesis = true;
 				else if ( _stricmp( str, "GOT_KILLED"    ) == 0 ) currentCodeBlock = &chatGotKilled;
 				else if ( _stricmp( str, "KILLED_PLAYER" ) == 0 ) currentCodeBlock = &chatKilledPlayer;
@@ -126,7 +126,7 @@ bool PB_Chat::load( const char *chatFile )
 				else if ( _stricmp( str, "JOINED_SERVER" ) == 0 ) currentCodeBlock = &chatJoin;
 				else if ( _stricmp( str, "REPLY_UNKNOWN" ) == 0 ) currentCodeBlock = &chatReplyUnknown;
 				else if ( _stricmp( str, "REPLY"         ) == 0 ) {
-					fscanf( file, " \"%[^\"]\" ", str );
+					temp += fscanf( file, " \"%[^\"]\" ", str );
 					str[MAX_CODE_LEN-1] = 0;			// make sure that codeword isn't too long
 					UTF8_strupr( str );						// convert to upper case
 					ReplyList *newReplyList = new ReplyList;
@@ -136,9 +136,9 @@ bool PB_Chat::load( const char *chatFile )
 					currentCodeBlock = newReplyList->reply;
 					bool moreKeywords = true;
 					do {
-						fscanf( file, "%1s", str );
+						temp += fscanf( file, "%1s", str );
 						if (str[0]==',') {				// next keyword following?
-							fscanf( file, " \"%[^\"]\" ", str );
+							temp += fscanf( file, " \"%[^\"]\" ", str );
 							ReplyList *addReplyList = new ReplyList;
 							strcpy( addReplyList->code, str );
 							addReplyList->reply = currentCodeBlock;
@@ -151,7 +151,7 @@ bool PB_Chat::load( const char *chatFile )
 			}
 			else {
 				fseek( file, -1, SEEK_CUR );	// reset filepointer
-				fscanf( file, "%[^\n]", str);	// read entire line
+				temp += fscanf( file, "%[^\n]", str);	// read entire line
 				if( !currentCodeBlock )
                                         continue;
 				if (speechSynthesis) strcat( str, ".wav" );
@@ -163,6 +163,8 @@ bool PB_Chat::load( const char *chatFile )
 			}
 			
 		}
+		if ( temp > 0 )
+			printf("Parabot - Error in pb_chat.cpp\n" );
 	}
 	fclose(	file );
 	chatFileLoaded = true;

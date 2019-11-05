@@ -47,10 +47,12 @@ PB_Cell::PB_Cell( edict_t *pEdict )
 
 PB_Cell::PB_Cell( FILE *fp )
 {
-	fread( &data, sizeof(TSaveData), 1, fp );
+	size_t temp = fread( &data, sizeof(TSaveData), 1, fp );
 	focus.load( fp );
 	kills.load( fp );
 	next = NO_CELL_REGISTERED;
+	if ( temp > 0 )
+		printf("Parabot - Error in pb_cell.cpp\n" );
 }
 
 

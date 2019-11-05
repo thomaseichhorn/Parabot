@@ -46,8 +46,10 @@ int PB_Focus::cellsForDir( Vector dir )
 
 bool PB_Focus::load( FILE *fp )
 {
-	fread( &numCellsInSector[0], sizeof(short), NUM_SECTORS, fp );
-	fread( &focusValue[0], sizeof(float), NUM_SECTORS, fp );
+	size_t temp = fread( &numCellsInSector[0], sizeof(short), NUM_SECTORS, fp );
+	temp += fread( &focusValue[0], sizeof(float), NUM_SECTORS, fp );
+	if ( temp > 0 )
+		printf("Parabot - Error in pb_focus.cpp\n" );
 	return true;
 }
 

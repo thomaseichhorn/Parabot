@@ -544,13 +544,13 @@ bool PB_MapGraph::load( char *mapname )
 	if ( (fp = fopen( mapname, "rb" )) == NULL ) return false;
 
 	char idString[32];	// check for correct version
-	fread( &idString, 32, 1, fp );
+	size_t temp = fread( &idString, 32, 1, fp );
 	if (strcmp( idString, PNFidString) !=0 ) {
 		fclose( fp );
 		return false;
 	}
 
-	fread( &passCount, sizeof(int), 1, fp );
+	temp += fread( &passCount, sizeof(int), 1, fp );
 
 	int i, numNpts, numPaths;
 	PB_Navpoint navpoint;
@@ -560,7 +560,7 @@ bool PB_MapGraph::load( char *mapname )
 	nextId = 0;
 	nextPathId = 0;
 
-	fread( &numNpts, sizeof(int), 1, fp );
+	temp += fread( &numNpts, sizeof(int), 1, fp );
 						
 	for (i=0; i<numNpts; i++) {
 		//printf( "n" );
@@ -568,7 +568,7 @@ bool PB_MapGraph::load( char *mapname )
 		addNavpoint( navpoint );
 	}
 	
-	fread( &numPaths, sizeof(int), 1, fp );
+	temp += fread( &numPaths, sizeof(int), 1, fp );
 
 	for (int j=0; j<numPaths; j++) {
 		//printf( "p" );
@@ -579,6 +579,8 @@ bool PB_MapGraph::load( char *mapname )
 	fclose( fp );
 	nextPathId++;	// largest ID + 1
 	initBackwardPaths();
+	if ( temp > 0 )
+		printf("Parabot - Error in pb_mapgraph.cpp\n" );
 	return true;
 }
 

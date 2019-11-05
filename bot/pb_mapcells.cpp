@@ -423,12 +423,14 @@ bool PB_MapCells::load( char *mapname )
 
 	int count;
 
-	fread( &count, sizeof(int), 1, fp );
+	size_t temp = fread( &count, sizeof(int), 1, fp );
 	for (int i=0; i<count; i++) addCell( PB_Cell( fp ), false ); // don't init neighbours
 
 	vis.load( fp );
 
 	fclose( fp );
+	if ( temp > 0 )
+		printf("Parabot - Error in pb_mapcells.cpp\n" );
 	return true;
 }
 

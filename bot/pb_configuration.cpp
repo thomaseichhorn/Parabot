@@ -56,7 +56,9 @@ bool PB_Configuration::varSet( const char *srcName, FILE *file, const char *varN
 	char buffer[1024];
 
 	if ( _stricmp( srcName, varName ) == 0 ) {
-		fscanf( file, " = %s ", buffer );
+		size_t temp = fscanf( file, " = %s ", buffer );
+		if ( temp > 0 )
+			printf("Parabot - Error in pb_configuration.cpp\n" );
 		if ( _stricmp( buffer, "ON" ) == 0 ) var = true;
 		else if ( _stricmp( buffer, "OFF" ) == 0 ) var = false;
 		return true;
@@ -151,48 +153,48 @@ bool PB_Configuration::initConfiguration( const char *configPath )
 	infoMsg( "Reading ", str, "... " );
 	
 	while (!feof(file)) {
-		fscanf( file, "%1s", str );			// read first char
+		size_t temp = fscanf( file, "%1s", str );			// read first char
 		if (feof(file)) break;
 
 		while (str[0]=='#') {				// Comments:
-			fscanf( file, "%[^\n]", str );	//   read entire line
-			fscanf( file, "%1s", str );		//   read first char
+			temp += fscanf( file, "%[^\n]", str );	//   read entire line
+			temp += fscanf( file, "%1s", str );		//   read first char
 		}
 		if ( !feof(file) ) {
 			
 			fseek( file, -1, SEEK_CUR );	// reset filepointer
-			fscanf( file, "%[a-zA-Z]", str);// now we've got a complete word
+			temp += fscanf( file, "%[a-zA-Z]", str);// now we've got a complete word
 			
 			if ( _stricmp( str, "NumBots" ) == 0 ) {
-				fscanf( file, " = %[0-9] ", str );		// read number of bots
+				temp += fscanf( file, " = %[0-9] ", str );		// read number of bots
 				myNumBots = clampInt( str, 0, 32 );
 			}
 			else if ( _stricmp( str, "MinBots" ) == 0 ) {
-				fscanf( file, " = %[0-9] ", str );		// read min. number of bots
+				temp += fscanf( file, " = %[0-9] ", str );		// read min. number of bots
 				myMinBots = clampInt( str, 0, 32 );
 			}
 			else if ( _stricmp( str, "MaxBots" ) == 0 ) {
-				fscanf( file, " = %[0-9] ", str );		// read max. number of bots
+				temp += fscanf( file, " = %[0-9] ", str );		// read max. number of bots
 				myMaxBots = clampInt( str, myMinBots, 32 );
 			}
 			else if ( _stricmp( str, "AverageStay" ) == 0 ) {
-				fscanf( file, " = %[0-9] ", str );		// read staytime
+				temp += fscanf( file, " = %[0-9] ", str );		// read staytime
 				myStayTime = 60.0 * (float)clampInt( str, 2, 180 );
 			}
 			else if ( _stricmp( str, "MinAimSkill" ) == 0 ) {
-				fscanf( file, " = %[0-9] ", str );		// read min aim skill
+				temp += fscanf( file, " = %[0-9] ", str );		// read min aim skill
 				minAimSkill = clampInt( str, 1, 10 );
 			}
 			else if ( _stricmp( str, "MaxAimSkill" ) == 0 ) {
-				fscanf( file, " = %[0-9] ", str );		// read max aim skill
+				temp += fscanf( file, " = %[0-9] ", str );		// read max aim skill
 				maxAimSkill = clampInt( str, minAimSkill, 10 );
 			}
 			else if ( _stricmp( str, "ChatFile" ) == 0 ) {
-				fscanf( file, " = \"%[^\"]\" ", str );		// read chat file
+				temp += fscanf( file, " = \"%[^\"]\" ", str );		// read chat file
 				strcpy( chatFileName, str );
 			}
 			else if ( _stricmp( str, "MenuKey" ) == 0 ) {
-				fscanf( file, " = \"%[^\"]\" ", str );		// read menu key
+				temp += fscanf( file, " = \"%[^\"]\" ", str );		// read menu key
 				strcpy( menuKey, str );
 			}
 			else {
@@ -205,10 +207,12 @@ bool PB_Configuration::initConfiguration( const char *configPath )
 				if (!varSet( str, file, "HideWelcome",			touringMode				))
 				if (!varSet( str, file, "ServerMode",			serverMode				)) {
 					debugMsg( "Unknown variable ", str, "\n" );
-					fscanf( file, "%[^\n]", str );	//   ignore entire line
+					temp += fscanf( file, "%[^\n]", str );	//   ignore entire line
 				}
 			}
 		}
+		if ( temp > 0 )
+			printf("Parabot - Error in pb_configuration.cpp\n" );
 	}
 	fclose(	file );
 	infoMsg( "OK!\n" );
@@ -233,34 +237,36 @@ bool PB_Configuration::initPersonalities( const char *personalityPath )
 
 	int nr = 0;
 	while (!feof(file)) {
-		fscanf( file, "%1s", str );						// supposed name start '"'
+		size_t temp = fscanf( file, "%1s", str );						// supposed name start '"'
 		if (feof(file)) break;
 
 		while (str[0]=='#') {							// Comments
-			fscanf( file, "%[^\n]", str );				// read entire line
-			fscanf( file, "%1s", str );					// supposed name start '"'
+			temp += fscanf( file, "%[^\n]", str );				// read entire line
+			temp += fscanf( file, "%1s", str );					// supposed name start '"'
 		}
 		if ( !feof(file) ) {
 			
-			fscanf( file, "%[^\"]\"", character[nr].name );		// read entire name
+			temp += fscanf( file, "%[^\"]\"", character[nr].name );		// read entire name
 						
-			fscanf( file, " \"%[^\"]\" ", character[nr].model );	// read entire model
+			temp += fscanf( file, " \"%[^\"]\" ", character[nr].model );	// read entire model
 						
-			fscanf( file, "%s", str );						// aim skill
+			temp += fscanf( file, "%s", str );						// aim skill
 			character[nr].aimSkill = clampInt( str, 1, 10 );
 			
-			fscanf( file, "%s", str );						// aggression
+			temp += fscanf( file, "%s", str );						// aggression
 			character[nr].aggression = clampInt( str, 1, 10 );
 			
-			fscanf( file, "%s", str );						// sensitivity
+			temp += fscanf( file, "%s", str );						// sensitivity
 			character[nr].sensitivity = clampInt( str, 1, 10 );
 
-			fscanf( file, "%s", str );						// communication
+			temp += fscanf( file, "%s", str );						// communication
 			character[nr].communication = clampInt( str, 1, 10 );
 			
 			nr++;
 			if (nr==MAX_PERS) break;
 		}
+		if ( temp > 0 )
+			printf("Parabot - Error in pb_configuration.cpp\n" );
 	}
 	maxPers = nr;
 	fclose(	file );

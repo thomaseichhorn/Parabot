@@ -105,14 +105,17 @@ void PB_VisTable::setVisibility( int cell1, int cell2, bool visible )
 
 void PB_VisTable::load( FILE *fp )
 {
-	fread( &numCells, sizeof(int), 1, fp );
-	fread( &traceCell, sizeof(int), 1, fp );
-	fread( &traceBit, sizeof(int), 1, fp );
+	size_t temp = fread( &numCells, sizeof(int), 1, fp );
+	temp = fread( &traceCell, sizeof(int), 1, fp );
+	temp = fread( &traceBit, sizeof(int), 1, fp );
 	for (int i=0; i<numCells; i++) {
 		//visTable[i] = getMem( i+1 );
 		int numInts = (i >> 5) + 1;
-		fread( visTable[i], sizeof(int), numInts, fp );
+		temp = fread( visTable[i], sizeof(int), numInts, fp );
 	}
+	if ( temp > 0 )
+		printf("Parabot - Error in pb_vistable.cpp\n" );
+
 }
 
 

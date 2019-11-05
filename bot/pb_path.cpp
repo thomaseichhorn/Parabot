@@ -227,44 +227,44 @@ void PB_Path::load( FILE *fp )
 
 	// read data
 	int i;
-	fread( &data, sizeof(TSaveData), 1, fp );
+	size_t temp = fread( &data, sizeof(TSaveData), 1, fp );
 	
 	if (data.dataId==data.privateId) {	// read lists if stored here
 
 		// read waypoints
 		waypoint = new WaypointList;
 		int numWpts;
-		fread( &numWpts, sizeof(int), 1, fp );
+		temp += fread( &numWpts, sizeof(int), 1, fp );
 		PB_Path_Waypoint wp;
 		assert( waypoint != 0 );
 		for (i=0; i<numWpts; i++) {
 			//printf( "w" );
-			fread( &wp.data, sizeof(PB_Path_Waypoint::TSaveData), 1, fp );
+			temp += fread( &wp.data, sizeof(PB_Path_Waypoint::TSaveData), 1, fp );
 			waypoint->push_back( wp );
 		}
 
 		// read attacks
 		hiddenAttack = new AttackList;
 		int numAtts;
-		fread( &numAtts, sizeof(int), 1, fp );
+		temp += fread( &numAtts, sizeof(int), 1, fp );
 		PB_Path_Attack att;
 		assert( hiddenAttack != 0 );
 		for (i=0; i<numAtts; i++) {
 			//printf( "a" );
-			fread( &att.data, sizeof(PB_Path_Attack::TSaveData), 1, fp );
+			temp += fread( &att.data, sizeof(PB_Path_Attack::TSaveData), 1, fp );
 			hiddenAttack->push_back( att );
 		}
 
 		// read platform info
 		platformPos = new PlatformList;
 		int numPlats;
-		fread( &numPlats, sizeof(int), 1, fp );
+		temp += fread( &numPlats, sizeof(int), 1, fp );
 		PB_Path_Platform pf;
 		assert( platformPos != 0 );
 		float pos[3];
 		for (i=0; i<numPlats; i++) {
-			fread( &(pf.data.navId), sizeof(int), 1, fp );
-			fread( &pos, 3*sizeof(float), 1, fp );
+			temp += fread( &(pf.data.navId), sizeof(int), 1, fp );
+			temp += fread( &pos, 3*sizeof(float), 1, fp );
 			pf.data.pos.x=pos[0];	pf.data.pos.y=pos[1];	pf.data.pos.z=pos[2];
 			if( pf.data.navId < 0 ) {
 				readyToDelete = true;
@@ -278,6 +278,9 @@ void PB_Path::load( FILE *fp )
 		hiddenAttack = 0;
 		platformPos = 0;
 	}
+
+	if ( temp > 0 )
+		printf("Parabot - Error in pb_path.cpp\n" );
 }
 
 

@@ -438,10 +438,12 @@ bool PB_Navpoint::reached( edict_t *playerEnt )
 
 void PB_Navpoint::load( FILE *fp )
 {
-	fread( &data, sizeof(TSaveData), 1, fp );
+	size_t temp = fread( &data, sizeof(TSaveData), 1, fp );
 	lastVisitor = 0;
 	lastVisitedAt = -100;
 	nextVisitAt = 0;
+	if ( temp > 0 )
+		printf("Parabot - Error in pb_navpoint.cpp\n" );
 }
 
 

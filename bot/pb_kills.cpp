@@ -27,7 +27,9 @@ short PB_Kills::forDir( Vector dir )
 
 bool PB_Kills::load( FILE *fp )
 {
-	fread( &numKillsInSector[0], sizeof(short), NUM_SECTORS, fp );
+	size_t temp = fread( &numKillsInSector[0], sizeof(short), NUM_SECTORS, fp );
+	if ( temp > 0 )
+		printf("Parabot - Error in pb_kills.cpp\n" );
 	return true;
 }
 
