@@ -122,6 +122,10 @@ extern "C" void WINAPI DLLEXPORT GiveFnptrsToDll( enginefuncs_t* pengfuncsFromEn
 	{
 		mod_id = GEARBOX_DLL;
 	}
+	else if( !strcmp( mod_name, "cstrike" ) )
+	{
+		mod_id = CSTRIKE_DLL;
+	}
 
 	sprintf( filePath, "%s/addons/parabot/config/", mod_name );
 #if defined(__ANDROID__)
@@ -184,6 +188,16 @@ extern "C" void WINAPI DLLEXPORT GiveFnptrsToDll( enginefuncs_t* pengfuncsFromEn
 				break;
 			case HUNGER_DLL:
                                 strcat( filePath, "/dlls/einar" ARCH_SUFFIX "." OS_LIB_EXT );
+                                break;
+			case CSTRIKE_DLL:
+				if ( OS_LIB_EXT == "dll" )
+				{
+					strcat( filePath, "/dlls/mp" ARCH_SUFFIX "." OS_LIB_EXT );
+				}
+				else
+				{
+					strcat( filePath, "/dlls/cs" ARCH_SUFFIX "." OS_LIB_EXT );
+				}
                                 break;
 			default:
 				break;
