@@ -208,7 +208,7 @@ void debugFile( char *msg )
 	if (!dbgFile) return;
 	sprintf( logfile, "%s/addons/parabot/log/debug.txt", mod_name );
 	FILE *fp=fopen( logfile, "a" ); 
-	fprintf( fp, msg ); 
+	fprintf( fp, "%s", msg ); 
 	fclose( fp );
 }
 

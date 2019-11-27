@@ -65,7 +65,7 @@ void pfnChangeLevel(const char *s1, const char *s2)
    {
       if (bots[index].is_used)  // is this slot used?
       {
-         char cmd[40];
+         char cmd[41];
 
          sprintf(cmd, "kick \"%s\"\n", bots[index].name);
 
